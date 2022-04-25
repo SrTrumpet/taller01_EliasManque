@@ -6,6 +6,33 @@ import java.util.Scanner;
 
 public class taller01_eliasManque {
 
+    /////////////////////////////////////////////// Menu Admin
+    public static void menuAdmin(){
+
+    }
+    /////////////////////////////////////////////// Menu Usuario
+    public static void menuUser(){
+
+    }
+    /////////////////////////////////////////////// Busqueda Usuario
+    public static void busquedaUser(String user, String pass) throws FileNotFoundException{
+
+        File archCliente = new File("Clientes.txt");
+        Scanner arch = new Scanner(archCliente);
+        while(arch.hasNext()){
+            String[] partes = arch.next().split(",");
+            String usuario = partes[0], contrase = partes[1];
+            if (user.equals(usuario)){
+                System.out.println("Usuario encontrado");
+                if(pass.equals(contrase)){
+                    System.out.println("Acceso Correcto");
+                }else{
+                    System.out.println("Contraseña Incorrecta");
+                }
+            }
+        }
+
+    }
     /////////////////////////////////////////////// Lectura archivo Productos
     public static String[] productos(File arch) throws FileNotFoundException{
         String[] stock;
@@ -24,22 +51,24 @@ public class taller01_eliasManque {
 
     public static void main(String[] args) throws Exception {
         /////////////////////////////////////////////// Lectura archivo Clientes
+
+        boolean confirmacion = true;
         Scanner leer = new Scanner(System.in);
-        File archCliente = new File("Clientes.txt");
-        File archProducto = new File("Productos.txt");
-        Scanner arch = new Scanner(archCliente);
-        int contador = 0;
-        String[] productosStock;
 
-        while (arch.hasNext()){
-            String [] partes = arch.next().split(",");
-            String User = partes[0], Pass = partes[1];
-            int saldo = Integer.parseInt(partes[2]);
-            String Email = partes[3];
-
-            contador++;
+        while(confirmacion){
+            System.out.print("Ingrese us usuario ===> ");
+            String user = leer.next();
+            System.out.print("Ingrese su contraseña ===> ");
+            String pass = leer.next();
+            busquedaUser(user,pass);
+            System.out.print("Desea volver a inciar? SI/NO ==>  ");
+            String opcion = leer.next();
+            opcion = opcion.toUpperCase();
+            if (opcion.equals("SI")){
+                confirmacion = true;
+            }else{
+                confirmacion = false;
+            }
         }
-        productos(archProducto);
     }
-    
 }
