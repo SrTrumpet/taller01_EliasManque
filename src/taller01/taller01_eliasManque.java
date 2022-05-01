@@ -45,16 +45,48 @@ public class taller01_eliasManque {
     public static int opcion(){
         return 0;
     }
+    ////////////////////////////////////////////////////////////////Registro
+
+    public static void Registro(){
+        System.out.println("Ya andamos en registro");
+    }
     ////////////////////////////////////////////////////////////////Inicio Sesion
 
-    public static void inicioSesion(Scanner leer,String user, String pass, String[] personas){
+    public static void inicioSesion(Scanner leer, String[] personas, String[] password){
+        String user;
+        String pass;
+        boolean validarWhile = true;
+        boolean encontrado = false;
+        System.out.println("################");
+        System.out.println("");
         System.out.println("Bienvenido");
-        System.out.println("Ingrese su nombre de Usuario y Contraseña");
-        user = leer.next();
-
-
-        
-
+        System.out.println("");
+        System.out.println("################");
+        while (validarWhile){
+            System.out.println("Ingrese su nombre de Usuario");
+            user = leer.next();
+            for (int i = 0; i < personas.length; i++){
+                if (user.equals(personas[i])){
+                    encontrado = true;
+                    System.out.println("Ingrese su Contraseña");
+                    pass = leer.next();
+                    if (pass.equals(password[i])){
+                        System.out.println("WENA WENA");
+                        validarWhile = false;
+                    }else{
+                        System.out.println("Contraseña incorrecta!");
+                        validarWhile = detener();
+                    }
+                }
+            }
+            if (!encontrado){
+                validarWhile = false;
+            }
+        }
+        if (!encontrado) {
+            System.out.println("Usuario no encontrado");
+            Registro();
+        }
     }
     ////////////////////////////////////////////////////////////////Boolean para detener el while del main
 
@@ -130,7 +162,7 @@ public class taller01_eliasManque {
 
         //Ingreso While
         while(vueltaWhile){
-            inicioSesion(leer,user,pass,usuario);
+            inicioSesion(leer,usuario,password);
             vueltaWhile = detener();
         }
     }
