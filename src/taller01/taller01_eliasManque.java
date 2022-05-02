@@ -7,8 +7,50 @@ public class taller01_eliasManque {
     
     ////////////////////////////////////////////////////////////////Admin
 
-    public static void admin(){
+    public static void admin(Scanner leer){
 
+
+    }
+    ////////////////////////////////////////////////////////////////USUARIO
+
+    public static void userMenu (String usuario, Scanner leer){
+        System.out.println("Bienvenido [%s]".formatted(usuario));
+        System.out.println("");
+        System.out.println("#####################");
+        boolean confirmacionWhile = true;
+        int opcion;
+        while(confirmacionWhile){
+            System.out.println("""
+                Ingresa tu opcion: 
+                1)Elige un Producto
+                2)Cambia tu contraseña
+                3)Ver catalogo de Productos
+                4)Ver tu Saldo [USD]
+                5)Recargar Saldo
+                6)Ver Carrito
+                7)Quitar productos del Carrito
+                8)Pagar Carrito
+                9)Cerrar Sesion
+                """);
+                System.out.print("===> ");
+                opcion = leer.nextInt();
+                if (opcion >= 1 && opcion<=9){
+                    if(opcion == 1){}
+                    if(opcion == 2){}
+                    if(opcion == 3){}
+                    if(opcion == 4){}
+                    if(opcion == 5){}
+                    if(opcion == 6){}
+                    if(opcion == 7){}
+                    if(opcion == 8){}
+                    if(opcion == 9){
+                        confirmacionWhile = false;
+                    }
+                }else{
+                    System.out.println("Opcion no Valida! intenta denuevo");
+                }
+
+        }
     }
     ////////////////////////////////////////////////////////////////Lectura de archivo int
 
@@ -56,7 +98,7 @@ public class taller01_eliasManque {
     ////////////////////////////////////////////////////////////////Registro
 
     public static void Registro(){
-        System.out.println("Ya andamos en registro");
+        
     }
     ////////////////////////////////////////////////////////////////Inicio Sesion
 
@@ -79,10 +121,10 @@ public class taller01_eliasManque {
                     System.out.println("Ingrese su Contraseña");
                     pass = leer.next();
                     if (pass.equals("NYAXIO")){
-                        admin();
+                        admin(leer);
                         validarWhile = false;
                     }else if (pass.equals(password[i])){
-                        System.out.println("WENA WENA");
+                        userMenu(user,leer);
                         validarWhile = false;
                     }else{
                         System.out.println("Contraseña incorrecta!");
@@ -156,6 +198,8 @@ public class taller01_eliasManque {
         File archClientes = new File("Clientes.txt");
         // Arch Productos
         File archProductos = new File("Productos.txt");
+        // Arch Ventas
+        File arhVentas = new File("Ventas.txt");
 
         //Inicializacion de Variables
         boolean vueltaWhile = true;
@@ -175,7 +219,7 @@ public class taller01_eliasManque {
 
         //Ingreso While
         while(vueltaWhile){
-            mostrarCAtalogo(archProductos);
+            //mostrarCAtalogo(archProductos);
             inicioSesion(leer,usuario,password);
             vueltaWhile = detener();
         }
