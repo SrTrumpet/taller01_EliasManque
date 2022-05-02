@@ -5,9 +5,15 @@ import java.util.*;
 
 public class taller01_eliasManque {
     
+    ////////////////////////////////////////////////////////////////Admin
+
+    public static void admin(){
+
+    }
     ////////////////////////////////////////////////////////////////Lectura de archivo int
 
     public static int[] pasoTXTaListaint (File archCliente, int[] lista, int index) throws Exception{
+        @SuppressWarnings("resource")
         Scanner arch = new Scanner(archCliente);
         for (int i = 0; i < lista.length; i++){
             String linea = arch.nextLine();
@@ -20,6 +26,7 @@ public class taller01_eliasManque {
     ////////////////////////////////////////////////////////////////Lectura de archivo STR
 
     public static String[] pasoTXTaListaStr (File archCliente, String[] lista, int index) throws Exception{
+        @SuppressWarnings("resource")
         Scanner arch = new Scanner(archCliente);
         for (int i = 0; i < lista.length; i++){
             String linea = arch.nextLine();
@@ -32,10 +39,11 @@ public class taller01_eliasManque {
     ////////////////////////////////////////////////////////////////Conteo de Lineas del Arch
 
     public static int conteoLineas(File archivoConteo) throws FileNotFoundException{
+        @SuppressWarnings("resource")
         Scanner arch = new Scanner(archivoConteo);
         int conteo = 0;
         while(arch.hasNext()){
-            String partes [] = arch.next().split(",");
+            arch.next().split(",");
             conteo++;
         }
         return conteo;
@@ -66,11 +74,14 @@ public class taller01_eliasManque {
             System.out.println("Ingrese su nombre de Usuario");
             user = leer.next();
             for (int i = 0; i < personas.length; i++){
-                if (user.equals(personas[i])){
+                if (user.equals(personas[i]) || user.equals("ADMIN")){
                     encontrado = true;
                     System.out.println("Ingrese su Contraseña");
                     pass = leer.next();
-                    if (pass.equals(password[i])){
+                    if (pass.equals("NYAXIO")){
+                        admin();
+                        validarWhile = false;
+                    }else if (pass.equals(password[i])){
                         System.out.println("WENA WENA");
                         validarWhile = false;
                     }else{
@@ -91,6 +102,7 @@ public class taller01_eliasManque {
     ////////////////////////////////////////////////////////////////Boolean para detener el while del main
 
     public static boolean detener(){
+        @SuppressWarnings("resource")
         Scanner leer = new Scanner(System.in);
         String respuesta;
         System.out.println("Desea iniciar nuevamente el programa? SI/NO ");
@@ -142,11 +154,12 @@ public class taller01_eliasManque {
     public static void main(String[] args) throws Exception {
         // Arch Clientes
         File archClientes = new File("Clientes.txt");
+        // Arch Productos
+        File archProductos = new File("Productos.txt");
 
         //Inicializacion de Variables
         boolean vueltaWhile = true;
         int tamañoArch = conteoLineas(archClientes);
-        String user = " ", pass = " ";
 
         //Variables para Arch Cliente
         String usuario[] = new String[tamañoArch];
@@ -162,6 +175,7 @@ public class taller01_eliasManque {
 
         //Ingreso While
         while(vueltaWhile){
+            mostrarCAtalogo(archProductos);
             inicioSesion(leer,usuario,password);
             vueltaWhile = detener();
         }
