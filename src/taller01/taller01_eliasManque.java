@@ -13,14 +13,16 @@ public class taller01_eliasManque {
     }
     ////////////////////////////////////////////////////////////////USUARIO
 
-    public static void userMenu (String usuario, Scanner leer){
+    public static void userMenu (String usuario, Scanner leer, File productos, int[] saldo, String[] pass, File clientes, int indice) throws Exception{
         System.out.println("Bienvenido [%s]".formatted(usuario));
         System.out.println("");
         System.out.println("#####################");
         boolean confirmacionWhile = true;
         int opcion;
+        String password = pass[indice];
         while(confirmacionWhile){
             System.out.println("""
+                    
                 Ingresa tu opcion: 
                 1)Elige un Producto
                 2)Cambia tu contraseña
@@ -36,10 +38,19 @@ public class taller01_eliasManque {
                 opcion = leer.nextInt();
                 if (opcion >= 1 && opcion<=9){
                     if(opcion == 1){}
-                    if(opcion == 2){}
-                    if(opcion == 3){}
-                    if(opcion == 4){}
-                    if(opcion == 5){}
+                    if(opcion == 2){
+                        pass = cambiaContraseña(leer,pass,indice,password);
+                    }
+                    if(opcion == 3){
+                        mostrarCAtalogo(productos);
+                    }
+                    if(opcion == 4){
+                        System.out.println("Tu saldo es: $"+saldo[indice]);
+                    }
+                    if(opcion == 5){
+                        saldo = recargarSaldo(leer, saldo, indice);
+                        System.out.println("Saldo recargado");
+                    }
                     if(opcion == 6){}
                     if(opcion == 7){}
                     if(opcion == 8){}
@@ -47,7 +58,9 @@ public class taller01_eliasManque {
                         confirmacionWhile = false;
                     }
                 }else{
+                    System.out.println("#####################");
                     System.out.println("Opcion no Valida! intenta denuevo");
+                    System.out.println("#####################");
                 }
 
         }
@@ -102,11 +115,12 @@ public class taller01_eliasManque {
     }
     ////////////////////////////////////////////////////////////////Inicio Sesion
 
-    public static void inicioSesion(Scanner leer, String[] personas, String[] password){
+    public static void inicioSesion(Scanner leer, String[] personas, String[] password,int[] saldo, File productos, File clientes) throws Exception{
         String user;
         String pass;
         boolean validarWhile = true;
         boolean encontrado = false;
+        int indice = 0;
         System.out.println("################");
         System.out.println("");
         System.out.println("Bienvenido");
@@ -124,7 +138,10 @@ public class taller01_eliasManque {
                         admin(leer);
                         validarWhile = false;
                     }else if (pass.equals(password[i])){
-                        userMenu(user,leer);
+                        System.out.println("################");
+                        System.out.println(" ");
+                        indice = i;
+                        userMenu(user, leer, productos, saldo, password, clientes, indice);
                         validarWhile = false;
                     }else{
                         System.out.println("Contraseña incorrecta!");
@@ -186,13 +203,50 @@ public class taller01_eliasManque {
                     """.formatted(producto,precio,unidadesDis));
         }
     }
+    ////////////////////////////////////////////////////////////////Recargar Saldo
+
+    public static int[] recargarSaldo (Scanner leer, int[] saldo,int indice){
+        int agregar;
+        System.out.println("Cuanto quiere recargar? ");
+        agregar = leer.nextInt();
+        saldo[indice] += agregar;
+        return saldo;
+    }
+    ////////////////////////////////////////////////////////////////Cambiar contraseña
+
+    public static String[] cambiaContraseña(Scanner leer, String pass[], int indice, String bPass){
+        boolean valorTrue = true;
+        String contra;
+        String anteriorContra;
+        System.out.println("Ingrese su contraseña anterior ");
+        while(valorTrue){
+            anteriorContra = leer.next();
+            if (anteriorContra.equals(bPass)){
+                System.out.println("Ingrese su nueva contraseña (Contraseña menor a 10 caracteres) ");
+                while (valorTrue){
+                    contra = leer.next();
+                    if (contra.length() > 0 && contra.length() <= 10){
+                        pass[indice] = contra;
+                        valorTrue = false;
+                        System.out.println("Nueva Contraseña Designada");
+                    }else{
+                        System.out.println("Contraseña no valida, intentalo nuevamente");
+                        System.out.println("Ingrese su nueva contraseña (Contraseña menor a 10 caracteres) ");
+                    }
+                }
+            }
+            else{
+                System.out.println("Contraseña no coincide con la anterior, intentalo nuevamente");
+                System.out.println("Ingrese su contraseña anterior ");
+            }
+        }
+    return pass;
+    }
 
 
 
 
-
-
-
+        //////////////////////////////////////////////////////////////// main
     public static void main(String[] args) throws Exception {
         // Arch Clientes
         File archClientes = new File("Clientes.txt");
@@ -220,7 +274,7 @@ public class taller01_eliasManque {
         //Ingreso While
         while(vueltaWhile){
             //mostrarCAtalogo(archProductos);
-            inicioSesion(leer,usuario,password);
+            inicioSesion(leer,usuario,password,saldo,archProductos,archClientes);
             vueltaWhile = detener();
         }
     }
