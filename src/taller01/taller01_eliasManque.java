@@ -37,7 +37,9 @@ public class taller01_eliasManque {
                 System.out.print("===> ");
                 opcion = leer.nextInt();
                 if (opcion >= 1 && opcion<=9){
-                    if(opcion == 1){}
+                    if(opcion == 1){
+
+                    }
                     if(opcion == 2){
                         pass = cambiaContraseña(leer,pass,indice,password);
                     }
@@ -103,15 +105,36 @@ public class taller01_eliasManque {
         }
         return conteo;
     }
-    ////////////////////////////////////////////////////////////////Int Respuesta Opciones
 
-    public static int opcion(){
-        return 0;
-    }
     ////////////////////////////////////////////////////////////////Registro
 
-    public static void Registro(){
-        
+    public static void Registro(Scanner leer, File archCliente) throws IOException{
+
+        System.out.println("#####################");
+        System.out.println("Registro: ");
+        System.out.println("#####################");
+        boolean finCiclo = true;
+        String contra =" ", user, correo;
+        System.out.println("Cree su combre de usuario: ");
+        user = leer.next();
+        System.out.println("Cree su contraseña (Maximo 10 caracteres)");
+
+        while(finCiclo){
+            contra = leer.next();
+            if (contra.length() > 0 && contra.length() <= 10){
+                System.out.println("Contraseña Designada");
+                finCiclo = false;
+            }else{
+                System.out.println("Contraseña no valida ingrese una nuevamente!!");
+                System.out.println("Cree su contraseña (Maximo 10 caracteres)");
+            }
+        }
+        BufferedWriter addUSer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archCliente,true)));
+        System.out.println("Por ultimo ingrese su correo electronico: ");
+        correo = leer.next();
+        addUSer.write("\n");
+        addUSer.write(user + "," + contra  + ",0," + correo );
+        addUSer.close();
     }
     ////////////////////////////////////////////////////////////////Inicio Sesion
 
@@ -155,7 +178,8 @@ public class taller01_eliasManque {
         }
         if (!encontrado) {
             System.out.println("Usuario no encontrado");
-            Registro();
+            Registro(leer,clientes);
+            System.out.println("Para hacer efectivo el Registro cierre el programa y vuelvalo a Abrir");
         }
     }
     ////////////////////////////////////////////////////////////////Boolean para detener el while del main
