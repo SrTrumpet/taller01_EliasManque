@@ -21,6 +21,12 @@ public class taller01_eliasManque {
     public static int precioProducto[];
     public static int unidadesDisponibles[];
 
+    public static String productosStockaux [];
+    public static int precioProductoaux[];
+    public static int unidadesDisponiblesaux[];
+
+    public static int tamañoFijoProductos;
+
 
 
     ////////////////////////////////////////////////////////////////Admin
@@ -46,6 +52,7 @@ public class taller01_eliasManque {
                 3) Agregar Producto
                 4) Agregar Stock
                 5) Actualizar Datos
+                6) Salir
                 """);
             opcion = leer.nextInt();
 
@@ -56,17 +63,23 @@ public class taller01_eliasManque {
                 ventas(nombProductosVendidos,vecesVendidos);
             }
             else if (opcion == 3){
+                tamañoArchProductos++;
                 agregarProducto(leer, productos);
+                tamañoFijoProductos++;
             }
             else if (opcion == 4){
-                addStock(leer,nomProductos,totalStock,precio);
+                addStock(leer);
             }
             else if (opcion == 5){
                 if(tamAnteriorProducto < precioProducto.length){
                     txt.añadirATxtProductos(archProductos, productosStock, precioProducto, unidadesDisponibles);
+                    tamañoFijoProductos = tamañoArchProductos;
                 }
-                
-            }else{
+            }
+            else if (opcion == 6){
+                ciclo = false;
+            }
+            else{
                 System.out.println("Opcion no valida!");
             }
         }
@@ -138,34 +151,21 @@ public class taller01_eliasManque {
     }
     ////////////////////////////////////////////////////////////////Agregar Stock
 
-    public static void addStock(Scanner leer, String [] productosNombre, int [] stockProducto, int [] precio) throws Exception {
+    public static void addStock(Scanner leer) throws Exception {
         
         //aer borrrar = new aer();
-        String ruta = archProductos.getAbsolutePath();
         System.out.println("Ingrese el nombre del producto");
         leer.nextLine();
         String nameProducto = leer.nextLine();
-        
-        int indice=0;
-
-        boolean encontrado = false;
-
-        for (int i = 0; i < productosNombre.length; i++){
-            if(nameProducto.equals(productosNombre[i])){
-                indice = i;
-                encontrado = true;
-                txt.borrar(ruta);
+        int canti = 0, suma;
+        for (int i = 0; i < productosStock.length; i++){
+            if(nameProducto.equals(productosStock[i])){
+                System.out.println("Ingrese cuanto quiere agregar: ");
+                canti = leer.nextInt();
+                suma = canti + unidadesDisponibles[i];
+                unidadesDisponibles[i] = suma;
                 break;
             }
-        }
-        if (encontrado){
-
-            System.out.println("Ingrese el stock que desea añadir: ");
-            int stock = leer.nextInt();
-            int sumaStock = unidadesDisponibles[indice] + stock;
-            unidadesDisponibles[indice] = sumaStock;
-            
-            txt.añadirATxtProductos(archProductos, productosStock, precioProducto, unidadesDisponibles);
         }
     }
     ////////////////////////////////////////////////////////////////Agregar Producto
@@ -178,35 +178,29 @@ public class taller01_eliasManque {
         int precio = leer.nextInt();
         System.out.println("Ingrese el stock: ");
         int stock = leer.nextInt();
-        /** 
-        BufferedWriter archProductosNuevo = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(productos, true)));
-        archProductosNuevo.write("\r"+nomProducto+","+precio+","+stock);
-        archProductosNuevo.close();
-*/
-        tamañoArchProductos++;
+
+        /////////////////////////
+        productosStockaux = new String[tamañoFijoProductos - 1];
+        productosStockaux = productosStock;
+        /////////////////////////
+        precioProductoaux = new int[tamañoFijoProductos - 1];
+        precioProductoaux = precioProducto;
+        /////////////////////////
+        unidadesDisponiblesaux = new int[tamañoFijoProductos - 1];
+        unidadesDisponiblesaux = unidadesDisponibles;
+        /////////////////////////
 
         productosStock = new String[tamañoArchProductos];
         precioProducto = new int[tamañoArchProductos];
         unidadesDisponibles = new int[tamañoArchProductos];
-        System.out.println(productosStock.length);
-        System.out.println(precioProducto.length);
-        System.out.println(unidadesDisponibles.length);
 
-        productosStock = pasoTXTSts(archProductos,productosStock,0);
-        System.out.println(Arrays.toString(productosStock));
-        precioProducto = pasoTXTInt(archProductos,precioProducto,1);
-        unidadesDisponibles = pasoTXTInt(archProductos,unidadesDisponibles,2);
+        productosStock = pasoTXTSts(productosStockaux,productosStock);
+        precioProducto = pasoTXTint(precioProductoaux,precioProducto);
+        unidadesDisponibles = pasoTXTint(unidadesDisponiblesaux,unidadesDisponibles);
 
         productosStock[tamañoArchProductos-1] = nomProducto;
         precioProducto[tamañoArchProductos-1] = precio;
         unidadesDisponibles[tamañoArchProductos-1] = stock;
-
-        System.out.println(Arrays.toString(productosStock));
-
-
-            
-        System.out.println(Arrays.toString(productosStock));
-
     }
 
     ////////////////////////////////////////////////////////////////Lectura de archivo int
@@ -237,28 +231,20 @@ public class taller01_eliasManque {
         return lista;
     }
     ////////////////////////////////////////////////////////////////Conteo de Lineas del Arch
-    public static String[] pasoTXTSts (File archCliente, String[] lista, int index) throws Exception{
-        @SuppressWarnings("resource")
-        Scanner arch = new Scanner(archCliente);
-        for (int i = 0; i < lista.length-1; i++){
-            String linea = arch.nextLine();
-            String partes[] = linea.split(",");
-            String valor = partes[index];
-            lista[i] = valor;
+    public static String[] pasoTXTSts (String[] anterior, String[] listaNueva) throws Exception{
+        
+        for (int i = 0; i < anterior.length; i++){
+            listaNueva[i] = anterior[i];
         }
-        return lista;
+        return listaNueva;
     }
     ////////////////////////////////////////////////////////////////Conteo de Lineas del Arch
-    public static int[] pasoTXTInt (File archCliente, int[] lista, int index) throws Exception{
-        @SuppressWarnings("resource")
-        Scanner arch = new Scanner(archCliente);
-        for (int i = 0; i < lista.length-1; i++){
-            String linea = arch.nextLine();
-            String partes[] = linea.split(",");
-            int valor = Integer.parseInt(partes[index]);
-            lista[i] = valor;
+    public static int[] pasoTXTint (int[] anterior, int[] listaNueva) throws Exception{
+        
+        for (int i = 0; i < anterior.length; i++){
+            listaNueva[i] = anterior[i];
         }
-        return lista;
+        return listaNueva;
     }
     ////////////////////////////////////////////////////////////////Conteo de Lineas del Arch
 
@@ -467,6 +453,8 @@ public class taller01_eliasManque {
         productosStock = new String[tamañoArchProductos];
         precioProducto = new int[tamañoArchProductos];
         unidadesDisponibles = new int[tamañoArchProductos];
+
+        tamañoFijoProductos = productosStock.length; 
 
         productosStock = pasoTXTaListaStr(archProductos,productosStock,0);
         precioProducto = pasoTXTaListaint(archProductos,precioProducto,1);
