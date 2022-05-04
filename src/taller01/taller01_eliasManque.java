@@ -5,11 +5,71 @@ import java.util.*;
 
 public class taller01_eliasManque {
     
+
+    // Arch Clientes
+    public static File archClientes = new File("Clientes.txt");
+    // Arch Productos
+    public static File archProductos = new File("Productos.txt");
+    // Arch Ventas
+    public static File arhVentas = new File("Ventas.txt");
+
+    public static int tamañoArch;
+    public static int tamañoArchProductos;
+    public static int tamañoArchVentas;
+    
+    public static String productosStock [];
+    public static int precioProducto[];
+    public static int unidadesDisponibles[];
+
+
+
     ////////////////////////////////////////////////////////////////Admin
 
-    public static void admin(Scanner leer){
+    public static void admin(Scanner leer, String[] nombProductosVendidos, int [] vecesVendidos, File productos, 
+                            String[] nomProductos, int[] totalStock, int[] precio) throws Exception{
 
+        int opcion;
+        boolean ciclo = true;
+        int tamAnteriorProducto = tamañoArchProductos;
+        int tamAnteriorCliente = tamañoArch;
 
+        System.out.println("################");
+        System.out.println("Bienvenido Admin");
+        System.out.println("################");
+
+        while(ciclo){
+            System.out.println("""
+
+                Opciones Disponibles
+                1) Bloquear Usuario
+                2) Ver Historial de Compras
+                3) Agregar Producto
+                4) Agregar Stock
+                5) Actualizar Datos
+                """);
+            opcion = leer.nextInt();
+
+            if (opcion == 1){
+
+            }
+            else if (opcion == 2){
+                ventas(nombProductosVendidos,vecesVendidos);
+            }
+            else if (opcion == 3){
+                agregarProducto(leer, productos);
+            }
+            else if (opcion == 4){
+                addStock(leer,nomProductos,totalStock,precio);
+            }
+            else if (opcion == 5){
+                if(tamAnteriorProducto < precioProducto.length){
+                    txt.añadirATxtProductos(archProductos, productosStock, precioProducto, unidadesDisponibles);
+                }
+                
+            }else{
+                System.out.println("Opcion no valida!");
+            }
+        }
     }
     ////////////////////////////////////////////////////////////////USUARIO
 
@@ -64,10 +124,93 @@ public class taller01_eliasManque {
                     System.out.println("Opcion no Valida! intenta denuevo");
                     System.out.println("#####################");
                 }
-
         }
     }
+    ////////////////////////////////////////////////////////////////Veces vendidos
+
+    public static void ventas(String[] nomProductos, int[] vecesVendidos){
+        System.out.println("");
+        System.out.println("Nombre Producto | Veces vendido");
+        for (int i = 0; i< nomProductos.length;i++){
+            System.out.println("#################");
+            System.out.println(nomProductos[i]+":    "+vecesVendidos[i]);
+        }
+    }
+    ////////////////////////////////////////////////////////////////Agregar Stock
+
+    public static void addStock(Scanner leer, String [] productosNombre, int [] stockProducto, int [] precio) throws Exception {
+        
+        //aer borrrar = new aer();
+        String ruta = archProductos.getAbsolutePath();
+        System.out.println("Ingrese el nombre del producto");
+        leer.nextLine();
+        String nameProducto = leer.nextLine();
+        
+        int indice=0;
+
+        boolean encontrado = false;
+
+        for (int i = 0; i < productosNombre.length; i++){
+            if(nameProducto.equals(productosNombre[i])){
+                indice = i;
+                encontrado = true;
+                txt.borrar(ruta);
+                break;
+            }
+        }
+        if (encontrado){
+
+            System.out.println("Ingrese el stock que desea añadir: ");
+            int stock = leer.nextInt();
+            int sumaStock = unidadesDisponibles[indice] + stock;
+            unidadesDisponibles[indice] = sumaStock;
+            
+            txt.añadirATxtProductos(archProductos, productosStock, precioProducto, unidadesDisponibles);
+        }
+    }
+    ////////////////////////////////////////////////////////////////Agregar Producto
+
+    public static void agregarProducto(Scanner leer, File productos) throws Exception{
+        System.out.println("Ingrese el nombre del producto: ");
+        String debugg = leer.nextLine();
+        String nomProducto = leer.nextLine();
+        System.out.println("Ingrse el precio (USD) del producto: ");
+        int precio = leer.nextInt();
+        System.out.println("Ingrese el stock: ");
+        int stock = leer.nextInt();
+        /** 
+        BufferedWriter archProductosNuevo = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(productos, true)));
+        archProductosNuevo.write("\r"+nomProducto+","+precio+","+stock);
+        archProductosNuevo.close();
+*/
+        tamañoArchProductos++;
+
+        productosStock = new String[tamañoArchProductos];
+        precioProducto = new int[tamañoArchProductos];
+        unidadesDisponibles = new int[tamañoArchProductos];
+        System.out.println(productosStock.length);
+        System.out.println(precioProducto.length);
+        System.out.println(unidadesDisponibles.length);
+
+        productosStock = pasoTXTSts(archProductos,productosStock,0);
+        System.out.println(Arrays.toString(productosStock));
+        precioProducto = pasoTXTInt(archProductos,precioProducto,1);
+        unidadesDisponibles = pasoTXTInt(archProductos,unidadesDisponibles,2);
+
+        productosStock[tamañoArchProductos-1] = nomProducto;
+        precioProducto[tamañoArchProductos-1] = precio;
+        unidadesDisponibles[tamañoArchProductos-1] = stock;
+
+        System.out.println(Arrays.toString(productosStock));
+
+
+            
+        System.out.println(Arrays.toString(productosStock));
+
+    }
+
     ////////////////////////////////////////////////////////////////Lectura de archivo int
+    
 
     public static int[] pasoTXTaListaint (File archCliente, int[] lista, int index) throws Exception{
         @SuppressWarnings("resource")
@@ -94,13 +237,37 @@ public class taller01_eliasManque {
         return lista;
     }
     ////////////////////////////////////////////////////////////////Conteo de Lineas del Arch
+    public static String[] pasoTXTSts (File archCliente, String[] lista, int index) throws Exception{
+        @SuppressWarnings("resource")
+        Scanner arch = new Scanner(archCliente);
+        for (int i = 0; i < lista.length-1; i++){
+            String linea = arch.nextLine();
+            String partes[] = linea.split(",");
+            String valor = partes[index];
+            lista[i] = valor;
+        }
+        return lista;
+    }
+    ////////////////////////////////////////////////////////////////Conteo de Lineas del Arch
+    public static int[] pasoTXTInt (File archCliente, int[] lista, int index) throws Exception{
+        @SuppressWarnings("resource")
+        Scanner arch = new Scanner(archCliente);
+        for (int i = 0; i < lista.length-1; i++){
+            String linea = arch.nextLine();
+            String partes[] = linea.split(",");
+            int valor = Integer.parseInt(partes[index]);
+            lista[i] = valor;
+        }
+        return lista;
+    }
+    ////////////////////////////////////////////////////////////////Conteo de Lineas del Arch
 
     public static int conteoLineas(File archivoConteo) throws FileNotFoundException{
         @SuppressWarnings("resource")
         Scanner arch = new Scanner(archivoConteo);
         int conteo = 0;
-        while(arch.hasNext()){
-            arch.next().split(",");
+        while(arch.hasNextLine()){
+            arch.nextLine();
             conteo++;
         }
         return conteo;
@@ -138,7 +305,9 @@ public class taller01_eliasManque {
     }
     ////////////////////////////////////////////////////////////////Inicio Sesion
 
-    public static void inicioSesion(Scanner leer, String[] personas, String[] password,int[] saldo, File productos, File clientes) throws Exception{
+    public static void inicioSesion(Scanner leer  , String[] personas, String[] password             , int [] saldo        , 
+                                    File productos, File clientes    , String[] nombProductosVendidos, int [] vecesVendidos,
+                                    String [] nomProductos           , int[] stockProducto           , int [] precio) throws Exception{
         String user;
         String pass;
         boolean validarWhile = true;
@@ -152,15 +321,24 @@ public class taller01_eliasManque {
         while (validarWhile){
             System.out.println("Ingrese su nombre de Usuario");
             user = leer.next();
+            if(user.equals("ADMIN")){
+                System.out.println("Ingrese su Contraseña");
+                    pass = leer.next();
+                if(pass.equals("NYAXIO")){
+                    encontrado = true;
+                    admin(leer,nombProductosVendidos,vecesVendidos,productos,nomProductos,stockProducto, precio);
+                    break;
+                }else{
+                    System.out.println("Contraseña incorrecta!");
+                    validarWhile = detener();
+                }
+            }else{
             for (int i = 0; i < personas.length; i++){
-                if (user.equals(personas[i]) || user.equals("ADMIN")){
+                if (user.equals(personas[i])){
                     encontrado = true;
                     System.out.println("Ingrese su Contraseña");
                     pass = leer.next();
-                    if (pass.equals("NYAXIO")){
-                        admin(leer);
-                        validarWhile = false;
-                    }else if (pass.equals(password[i])){
+                    if (pass.equals(password[i])){
                         System.out.println("################");
                         System.out.println(" ");
                         indice = i;
@@ -172,6 +350,7 @@ public class taller01_eliasManque {
                     }
                 }
             }
+        }
             if (!encontrado){
                 validarWhile = false;
             }
@@ -267,26 +446,36 @@ public class taller01_eliasManque {
     return pass;
     }
 
-
-
-
         //////////////////////////////////////////////////////////////// main
     public static void main(String[] args) throws Exception {
-        // Arch Clientes
-        File archClientes = new File("Clientes.txt");
-        // Arch Productos
-        File archProductos = new File("Productos.txt");
-        // Arch Ventas
-        File arhVentas = new File("Ventas.txt");
+        
 
         //Inicializacion de Variables
         boolean vueltaWhile = true;
-        int tamañoArch = conteoLineas(archClientes);
+        tamañoArch = conteoLineas(archClientes);
+        tamañoArchProductos = conteoLineas(archProductos);
+        tamañoArchVentas = conteoLineas(arhVentas);
+
+        //Variables para Arch Ventas
+        String productosVentas [] = new String[tamañoArchVentas];
+        int unidadesVendidas [] = new int[tamañoArchVentas];
+
+        productosVentas = pasoTXTaListaStr(arhVentas, productosVentas, 0);
+        unidadesVendidas = pasoTXTaListaint(arhVentas, unidadesVendidas, 1);
+
+        //Variables para Arch Productos
+        productosStock = new String[tamañoArchProductos];
+        precioProducto = new int[tamañoArchProductos];
+        unidadesDisponibles = new int[tamañoArchProductos];
+
+        productosStock = pasoTXTaListaStr(archProductos,productosStock,0);
+        precioProducto = pasoTXTaListaint(archProductos,precioProducto,1);
+        unidadesDisponibles = pasoTXTaListaint(archProductos,unidadesDisponibles,2);
 
         //Variables para Arch Cliente
-        String usuario[] = new String[tamañoArch];
-        String password[] = new String[tamañoArch];
-        int saldo[] = new int[tamañoArch];
+        String usuario [] = new String[tamañoArch];
+        String password [] = new String[tamañoArch];
+        int saldo [] = new int[tamañoArch];
 
         usuario = pasoTXTaListaStr(archClientes, usuario, 0);
         password = pasoTXTaListaStr(archClientes, password, 1);
@@ -298,7 +487,8 @@ public class taller01_eliasManque {
         //Ingreso While
         while(vueltaWhile){
             //mostrarCAtalogo(archProductos);
-            inicioSesion(leer,usuario,password,saldo,archProductos,archClientes);
+            inicioSesion(leer,usuario,password,saldo,archProductos,archClientes,productosVentas,unidadesVendidas,
+                        productosStock,unidadesDisponibles,precioProducto);
             vueltaWhile = detener();
         }
     }
