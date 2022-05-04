@@ -3,14 +3,3 @@ Poly Station,500,23
 Lavadora,300,50
 Note 10,600,20
 Galaxy S20,700,50
-Kako,40,10
-potatoes,60,10
-gogo,90,20
-pooot,50,20
-uvas,80,40
-rollo,90,40
-melones,90,40
-sandias,90,90
-fufo,60,27
-puta,90,70
-gato,50,60
