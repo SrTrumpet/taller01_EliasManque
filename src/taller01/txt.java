@@ -27,5 +27,22 @@ public class txt {
         }
         arch.close();
         }
+        public static void añadirATxtClientes(File clientes, String [] nomClientes, String[] password, int[] slado, String[] correos) throws IOException{
+            String ruta = clientes.getAbsolutePath();
+            FileWriter arch = new FileWriter(ruta);
+            
+            int ultimaLinea = 0;
+            ultimaLinea = nomClientes.length - 1;
+    
+            for (int i = 0; i < nomClientes.length; i++){
+                
+                if (ultimaLinea == i){
+                    arch.write(nomClientes[i]+","+password[i]+","+slado[i]+","+correos[i]);
+                }else{
+                    arch.write(nomClientes[i]+","+password[i]+","+slado[i]+","+correos[i]+"\n");
+                }
+            }
+            arch.close();
+            }
     }
 
