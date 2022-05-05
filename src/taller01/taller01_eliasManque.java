@@ -1,4 +1,4 @@
-package Taller01;
+package taller01;
 
 import java.io.*;
 import java.util.*;
