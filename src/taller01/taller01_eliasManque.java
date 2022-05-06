@@ -1,4 +1,4 @@
-package Taller01;
+package taller01;
 
 import java.io.*;
 import java.util.*;
@@ -501,7 +501,6 @@ public class taller01_eliasManque {
     public static void cambiaContraseña(Scanner leer,int indice){
         boolean valorTrue = true;
         String anteriorPASS="", nuevaContra = "";
-        System.out.println(Arrays.toString(password));
         while(valorTrue){
             System.out.println("Ingrese su anterior contraseña: ");
             anteriorPASS = leer.next();
@@ -519,7 +518,6 @@ public class taller01_eliasManque {
                 System.out.println("Contraseña no coincide con la anterior!!");
             }
         }
-        System.out.println(Arrays.toString(password));
     }
         //////////////////////////////////////////////////////////////// main
     public static void main(String[] args) throws Exception {
