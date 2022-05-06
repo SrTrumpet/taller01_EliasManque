@@ -1,4 +1,4 @@
-package taller01;
+package Taller01;
 
 import java.io.*;
 import java.util.*;
@@ -81,8 +81,7 @@ public class taller01_eliasManque {
             opcion = leer.nextInt();
 
             if (opcion == 1){
-
-
+                bloquearUsuario(leer);
             }
             else if (opcion == 2){
                 ventas();
@@ -99,11 +98,13 @@ public class taller01_eliasManque {
                 if(tamAnteriorProducto < precioProducto.length){
                     txt.añadirATxtProductos(archProductos, productosStock, precioProducto, unidadesDisponibles);
                     tamañoFijoProductos = tamañoArchProductos;
+                }if (usuario.length < usuarioAux.length) {
+                    txt.añadirATxtClientes(archClientes, usuario, password, saldo, correos);
                 }
             }
             else if (opcion == 6){
                 updatePrice(leer);
-                System.out.println(Arrays.toString(precioProducto));
+                System.out.println();
             }
             else if (opcion == 7){
                 ciclo = false;
@@ -115,7 +116,8 @@ public class taller01_eliasManque {
     }
     ////////////////////////////////////////////////////////////////USUARIO
 
-    public static void userMenu (String usuarioEntrada, Scanner leer, File productos, String[] pass, File clientes, int indice) throws Exception{
+    public static void userMenu (String usuarioEntrada, Scanner leer , File productos, 
+                                String[] pass         , File clientes, int indice    ) throws Exception{
         System.out.println("Bienvenido [%s]".formatted(usuarioEntrada));
         System.out.println("");
         System.out.println("#####################");
@@ -166,6 +168,53 @@ public class taller01_eliasManque {
                     System.out.println("Opcion no Valida! intenta denuevo");
                     System.out.println("#####################");
                 }
+        }
+    }
+    ////////////////////////////////////////////////////////////////Bloquear Usuario
+
+    public static void bloquearUsuario(Scanner leer){
+
+        usuarioAux = usuario;
+        passwordAux = password;
+        saldoAux = saldo;
+        correosAux = correos;
+
+        System.out.println("USUARIOS: "+ Arrays.toString(usuarioAux));
+        int tamañoLista = usuarioAux.length;
+        int indice = 0,agregar = 0;
+
+        System.out.println("Ingrese el nombre del usuario que bloqueará: ");
+        String userBloqueado = leer.next();
+
+        boolean encontrado = true;
+
+        for (int i = 0; i < usuarioAux.length; i++){
+            if(usuarioAux[i].equals(userBloqueado)){
+
+                encontrado = false;
+
+                usuario = new String[tamañoLista - 1];
+                password = new String[tamañoLista - 1];
+                saldo = new int [tamañoLista - 1];
+                correos = new String[tamañoLista - 1];
+                indice = i;
+
+                for (int listaNueva = 0; listaNueva < usuarioAux.length; listaNueva++){
+                    if(indice != listaNueva){
+                        usuario[agregar] = usuarioAux[listaNueva];
+                        password[agregar] = passwordAux[listaNueva];
+                        saldo[agregar] = saldoAux[listaNueva];
+                        correos[agregar] = correosAux[listaNueva];
+
+                        agregar++;
+                    }
+                }
+            }
+        }
+        if (encontrado){
+            System.out.println("Usuario no encontrado!! ");
+        }else{
+            System.out.println("Nueva lista de usuarios: "+ Arrays.toString(usuario));
         }
     }
     ////////////////////////////////////////////////////////////////Veces vendidos
@@ -337,9 +386,9 @@ public class taller01_eliasManque {
     }
     ////////////////////////////////////////////////////////////////Inicio Sesion
 
-    public static void inicioSesion(Scanner leer  , String[] password             , 
-                                    File productos, File clientes    , String[] nombProductosVendidos, int [] vecesVendidos,
-                                    String [] nomProductos           , int[] stockProducto           , int [] precio) throws Exception{
+    public static void inicioSesion(Scanner leer  , String[] password, File productos, File clientes, 
+                                    String[] nombProductosVendidos, int [] vecesVendidos, String [] nomProductos,
+                                    int[] stockProducto           , int [] precio) throws Exception{
         String user;
         String pass;
         boolean validarWhile = true;

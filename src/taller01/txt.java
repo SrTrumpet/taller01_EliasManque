@@ -10,7 +10,8 @@ public class txt {
         arch.delete();
         File archProducto = new File(ruta);
     }
-    public static void añadirATxtProductos(File productos, String [] nomProductos, int[] precio, int[] stock) throws IOException{
+    public static void añadirATxtProductos(File productos, String [] nomProductos, 
+                                            int[] precio, int[] stock) throws IOException{
         String ruta = productos.getAbsolutePath();
         FileWriter arch = new FileWriter(ruta);
         
@@ -26,7 +27,7 @@ public class txt {
             }
         }
         arch.close();
-        }
+    }
         public static void añadirATxtClientes(File clientes, String [] nomClientes, String[] password, int[] slado, String[] correos) throws IOException{
             String ruta = clientes.getAbsolutePath();
             FileWriter arch = new FileWriter(ruta);
